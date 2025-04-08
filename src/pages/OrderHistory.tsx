@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
@@ -98,7 +97,6 @@ const OrderHistory = () => {
       setIsPaymentProcessing(true);
       const updatedOrder = await payForOrder(orderId, currentUser.id);
       
-      // Update the order in the local state
       const updatedOrders = orders.map(order => {
         if (order.id === orderId) {
           return updatedOrder;
@@ -128,7 +126,6 @@ const OrderHistory = () => {
       setIsCancelling(true);
       const updatedOrder = await updateOrderStatus(orderId, 'cancelled', currentUser.id);
       
-      // Update the order in the local state
       const updatedOrders = orders.map(order => {
         if (order.id === orderId) {
           return updatedOrder;
@@ -169,7 +166,6 @@ const OrderHistory = () => {
   return (
     <MainLayout title="Order History">
       <div className="space-y-6">
-        {/* Search and filter */}
         <Card>
           <CardContent className="pt-6">
             <div className="relative">
@@ -184,7 +180,6 @@ const OrderHistory = () => {
           </CardContent>
         </Card>
         
-        {/* Orders list */}
         <Card>
           <CardHeader>
             <CardTitle>Your Orders</CardTitle>
@@ -264,7 +259,6 @@ const OrderHistory = () => {
           </CardContent>
         </Card>
         
-        {/* Order details dialog */}
         {selectedOrder && (
           <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
             <DialogContent className="max-w-lg">

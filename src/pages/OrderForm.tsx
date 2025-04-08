@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -67,6 +66,7 @@ const OrderForm = () => {
     try {
       setLoading(true);
       
+      // Make sure to pass the current user's ID when creating an order
       await createOrder({
         userId: currentUser.id,
         fuelType,

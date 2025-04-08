@@ -84,7 +84,7 @@ export const getUserOrders = async (userId: string): Promise<FuelOrder[]> => {
     await new Promise(resolve => setTimeout(resolve, 500));
     
     const orders = getOrders();
-    // Ensure we only return orders that belong to this specific user
+    // Make sure we're strictly comparing userId to only get the current user's orders
     return orders
       .filter(order => order.userId === userId)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
