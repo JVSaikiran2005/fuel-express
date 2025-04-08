@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { 
-  Home, Truck, History, LogOut, Menu, X
+  Home, Truck, History, LogOut, Menu, X, Mail
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -15,7 +15,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ 
   children, 
-  title = 'Fuel Flow Oasis' 
+  title = 'Fuel Express' 
 }) => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       {/* Sidebar - Desktop */}
       <div className="hidden lg:flex flex-col w-64 bg-white border-r border-gray-200">
         <div className="h-16 flex items-center justify-center border-b border-gray-200">
-          <h1 className="font-bold text-xl text-fuel-blue">Fuel Flow Oasis</h1>
+          <h1 className="font-bold text-xl text-fuel-blue">Fuel Express</h1>
         </div>
         
         <div className="flex flex-col justify-between flex-1 px-4 py-6">
@@ -112,7 +112,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       )}>
         <div className="flex flex-col w-64 h-full bg-white border-r border-gray-200">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
-            <h1 className="font-bold text-xl text-fuel-blue">Fuel Flow Oasis</h1>
+            <h1 className="font-bold text-xl text-fuel-blue">Fuel Express</h1>
           </div>
           
           <div className="flex flex-col justify-between flex-1 p-4">
@@ -171,6 +171,22 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         <main className="flex-1 overflow-y-auto p-6">
           {children}
         </main>
+        
+        {/* Footer with Contact Information */}
+        <footer className="bg-white border-t border-gray-200 p-4 text-center text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Mail className="h-4 w-4" />
+            <span>Email us for support:</span>
+          </div>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+            <span>5231412019@gvpcdpgc.edu.in</span>
+            <span>5231412017@gvpcdpgc.edu.in</span>
+            <span>5231412011@gvpcdpgc.edu.in</span>
+            <span>5231412060@gvpcdpgc.edu.in</span>
+            <span>5231412038@gvpcdpgc.edu.in</span>
+          </div>
+          <p className="mt-2">© 2025 Fuel Express. All rights reserved.</p>
+        </footer>
       </div>
     </div>
   );

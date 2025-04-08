@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -23,14 +24,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from '@/components/ui/slider';
+import { 
+  RadioGroup, 
+  RadioGroupItem 
+} from "@/components/ui/radio-group";
 import { toast } from 'sonner';
-import { createOrder } from '@/services/orderService';
-import { Loader2, DollarSign, Truck, Droplets } from 'lucide-react';
+import { createOrder, getFuelPrices } from '@/services/orderService';
+import { Loader2, CreditCard, Truck, Droplets, IndianRupee, Phone, Mail } from 'lucide-react';
 
 const fuelTypes = [
-  { value: 'petrol', label: 'Petrol', price: 1.5 },
-  { value: 'diesel', label: 'Diesel', price: 1.3 },
-  { value: 'premium', label: 'Premium', price: 1.8 },
+  { value: 'petrol', label: 'Petrol' },
+  { value: 'diesel', label: 'Diesel' },
+];
+
+const paymentMethods = [
+  { value: 'phonepe', label: 'PhonePe', icon: <Phone className="mr-2 h-4 w-4" /> },
+  { value: 'credit_card', label: 'Credit Card', icon: <CreditCard className="mr-2 h-4 w-4" /> },
+  { value: 'debit_card', label: 'Debit Card', icon: <CreditCard className="mr-2 h-4 w-4" /> },
+  { value: 'cash_on_delivery', label: 'Cash on Delivery', icon: <IndianRupee className="mr-2 h-4 w-4" /> },
 ];
 
 const OrderForm = () => {
@@ -43,10 +54,13 @@ const OrderForm = () => {
   const [quantity, setQuantity] = useState(50);
   const [address, setAddress] = useState('');
   const [extraNotes, setExtraNotes] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
+
+  // Get current fuel prices
+  const fuelPrices = getFuelPrices();
 
   // Calculate price based on selected options
-  const selectedFuelType = fuelTypes.find(type => type.value === fuelType);
-  const pricePerLiter = selectedFuelType?.price || 1.5;
+  const pricePerLiter = fuelPrices[fuelType as keyof typeof fuelPrices] || 102.50;
   const totalPrice = pricePerLiter * quantity;
 
   // Handle form submission
@@ -72,6 +86,7 @@ const OrderForm = () => {
         fuelType,
         quantity,
         deliveryAddress: address,
+        paymentMethod: paymentMethod as any,
       });
       
       navigate('/history');
@@ -111,7 +126,7 @@ const OrderForm = () => {
                       <SelectGroup>
                         {fuelTypes.map((type) => (
                           <SelectItem key={type.value} value={type.value}>
-                            {type.label} (${type.price.toFixed(2)}/L)
+                            {type.label} (₹{fuelPrices[type.value as keyof typeof fuelPrices].toFixed(2)}/L)
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -127,18 +142,18 @@ const OrderForm = () => {
                   
                   <Slider
                     id="quantity"
-                    min={10}
-                    max={500}
-                    step={5}
+                    min={1}
+                    max={50}
+                    step={1}
                     value={[quantity]}
                     onValueChange={(values) => setQuantity(values[0])}
                     className="py-4"
                   />
                   
                   <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>10 L</span>
-                    <span>250 L</span>
-                    <span>500 L</span>
+                    <span>1 L</span>
+                    <span>25 L</span>
+                    <span>50 L</span>
                   </div>
                 </div>
                 
@@ -164,6 +179,25 @@ const OrderForm = () => {
                     className="min-h-[80px]"
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <Label>Payment Method</Label>
+                  <RadioGroup
+                    value={paymentMethod}
+                    onValueChange={setPaymentMethod}
+                    className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                  >
+                    {paymentMethods.map((method) => (
+                      <div key={method.value} className="flex items-center space-x-2 rounded-md border p-3">
+                        <RadioGroupItem value={method.value} id={method.value} />
+                        <Label htmlFor={method.value} className="flex items-center cursor-pointer">
+                          {method.icon}
+                          {method.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
               </CardContent>
             </Card>
             
@@ -177,11 +211,14 @@ const OrderForm = () => {
                 <div className="space-y-1.5">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Fuel Type:</span>
-                    <span className="font-medium">{selectedFuelType?.label}</span>
+                    <span className="font-medium">{fuelType === 'petrol' ? 'Petrol' : 'Diesel'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Price per liter:</span>
-                    <span className="font-medium">${pricePerLiter.toFixed(2)}</span>
+                    <span className="font-medium flex items-center">
+                      <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+                      {pricePerLiter.toFixed(2)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Quantity:</span>
@@ -194,7 +231,10 @@ const OrderForm = () => {
                   <div className="border-t my-3"></div>
                   <div className="flex justify-between">
                     <span className="font-medium">Total:</span>
-                    <span className="font-bold text-lg">${totalPrice.toFixed(2)}</span>
+                    <span className="font-bold text-lg flex items-center">
+                      <IndianRupee className="h-4 w-4 mr-0.5" />
+                      {totalPrice.toFixed(2)}
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -208,7 +248,7 @@ const OrderForm = () => {
                     </>
                   ) : (
                     <>
-                      <DollarSign className="mr-2 h-4 w-4" />
+                      <IndianRupee className="mr-2 h-4 w-4" />
                       Place Order
                     </>
                   )}
@@ -237,6 +277,31 @@ const OrderForm = () => {
                     <div>
                       <p className="font-medium">Fuel Quality</p>
                       <p className="text-muted-foreground">We provide high-quality, certified fuel that meets all industry standards.</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contact Information */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Contact Us</CardTitle>
+                <CardDescription>
+                  Get in touch with our support team
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <div className="grid gap-1">
+                      <p className="text-sm text-muted-foreground">Email us:</p>
+                      <p className="text-sm">5231412019@gvpcdpgc.edu.in</p>
+                      <p className="text-sm">5231412017@gvpcdpgc.edu.in</p>
+                      <p className="text-sm">5231412011@gvpcdpgc.edu.in</p>
+                      <p className="text-sm">5231412060@gvpcdpgc.edu.in</p>
+                      <p className="text-sm">5231412038@gvpcdpgc.edu.in</p>
                     </div>
                   </div>
                 </div>

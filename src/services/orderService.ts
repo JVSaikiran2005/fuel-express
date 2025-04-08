@@ -10,6 +10,7 @@ export interface FuelOrder {
   deliveryAddress: string;
   status: 'pending' | 'processing' | 'delivered' | 'cancelled';
   paymentStatus: 'unpaid' | 'paid';
+  paymentMethod?: 'phonepe' | 'credit_card' | 'debit_card' | 'cash_on_delivery';
   createdAt: string;
   updatedAt: string;
 }
@@ -19,6 +20,7 @@ export interface CreateOrderData {
   fuelType: string;
   quantity: number;
   deliveryAddress: string;
+  paymentMethod?: 'phonepe' | 'credit_card' | 'debit_card' | 'cash_on_delivery';
 }
 
 // Helper function to get orders from localStorage
@@ -32,16 +34,20 @@ const saveOrders = (orders: FuelOrder[]) => {
   localStorage.setItem('fuelOrders', JSON.stringify(orders));
 };
 
+// Get current fuel prices
+export const getFuelPrices = () => {
+  // In a real app, these would come from an API or database
+  return {
+    'petrol': 102.50, // Price in ₹
+    'diesel': 96.25,  // Price in ₹
+  };
+};
+
 // Calculate price based on fuel type and quantity
 const calculatePrice = (fuelType: string, quantity: number): number => {
-  const pricePerLiter = {
-    'petrol': 1.5,
-    'diesel': 1.3,
-    'premium': 1.8
-  };
-  
-  const fuelPrice = pricePerLiter[fuelType as keyof typeof pricePerLiter] || 1.5;
-  return parseFloat((fuelPrice * quantity).toFixed(2));
+  const fuelPrices = getFuelPrices();
+  const pricePerLiter = fuelPrices[fuelType as keyof typeof fuelPrices] || 102.50;
+  return parseFloat((pricePerLiter * quantity).toFixed(2));
 };
 
 // Create a new order
@@ -60,7 +66,8 @@ export const createOrder = async (orderData: CreateOrderData): Promise<FuelOrder
       totalPrice,
       deliveryAddress: orderData.deliveryAddress,
       status: 'pending',
-      paymentStatus: 'unpaid',
+      paymentStatus: orderData.paymentMethod === 'cash_on_delivery' ? 'unpaid' : 'paid',
+      paymentMethod: orderData.paymentMethod,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -132,7 +139,11 @@ export const updateOrderStatus = async (
 };
 
 // Pay for an order
-export const payForOrder = async (orderId: string, userId: string): Promise<FuelOrder> => {
+export const payForOrder = async (
+  orderId: string, 
+  userId: string, 
+  paymentMethod: 'phonepe' | 'credit_card' | 'debit_card' | 'cash_on_delivery'
+): Promise<FuelOrder> => {
   try {
     // Simulate payment processing
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -151,7 +162,8 @@ export const payForOrder = async (orderId: string, userId: string): Promise<Fuel
     
     orders[orderIndex] = {
       ...orders[orderIndex],
-      paymentStatus: 'paid',
+      paymentStatus: paymentMethod === 'cash_on_delivery' ? 'unpaid' : 'paid',
+      paymentMethod,
       status: 'processing',
       updatedAt: new Date().toISOString()
     };

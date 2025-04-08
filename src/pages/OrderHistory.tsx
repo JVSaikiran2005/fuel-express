@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
@@ -24,9 +25,30 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Search, AlertCircle, CreditCard, X, Calendar } from 'lucide-react';
+import { 
+  Loader2, 
+  Search, 
+  AlertCircle, 
+  CreditCard, 
+  X, 
+  Calendar, 
+  IndianRupee,
+  Phone,
+  Mail 
+} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { 
+  RadioGroup, 
+  RadioGroupItem 
+} from "@/components/ui/radio-group";
+
+const paymentMethods = [
+  { value: 'phonepe', label: 'PhonePe', icon: <Phone className="mr-2 h-4 w-4" /> },
+  { value: 'credit_card', label: 'Credit Card', icon: <CreditCard className="mr-2 h-4 w-4" /> },
+  { value: 'debit_card', label: 'Debit Card', icon: <CreditCard className="mr-2 h-4 w-4" /> },
+  { value: 'cash_on_delivery', label: 'Cash on Delivery', icon: <IndianRupee className="mr-2 h-4 w-4" /> },
+];
 
 const OrderHistory = () => {
   const { currentUser } = useAuth();
@@ -38,6 +60,8 @@ const OrderHistory = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(paymentMethods[0].value);
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -90,15 +114,25 @@ const OrderHistory = () => {
     }).format(date);
   };
 
-  const handlePayment = async (orderId: string) => {
-    if (!currentUser) return;
+  const handleOpenPaymentDialog = (order: FuelOrder) => {
+    setSelectedOrder(order);
+    setIsDetailsOpen(false);
+    setIsPaymentDialogOpen(true);
+  };
+
+  const handlePayment = async () => {
+    if (!currentUser || !selectedOrder) return;
     
     try {
       setIsPaymentProcessing(true);
-      const updatedOrder = await payForOrder(orderId, currentUser.id);
+      const updatedOrder = await payForOrder(
+        selectedOrder.id, 
+        currentUser.id,
+        selectedPaymentMethod as any
+      );
       
       const updatedOrders = orders.map(order => {
-        if (order.id === orderId) {
+        if (order.id === selectedOrder.id) {
           return updatedOrder;
         }
         return order;
@@ -107,11 +141,11 @@ const OrderHistory = () => {
       setOrders(updatedOrders);
       setFilteredOrders(updatedOrders);
       
-      if (selectedOrder && selectedOrder.id === orderId) {
+      if (selectedOrder) {
         setSelectedOrder(updatedOrder);
       }
       
-      setIsDetailsOpen(false);
+      setIsPaymentDialogOpen(false);
     } catch (error) {
       console.error('Payment failed:', error);
     } finally {
@@ -214,7 +248,10 @@ const OrderHistory = () => {
                       </TableCell>
                       <TableCell>{order.fuelType}</TableCell>
                       <TableCell>{order.quantity} L</TableCell>
-                      <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+                      <TableCell className="flex items-center">
+                        <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+                        {order.totalPrice.toFixed(2)}
+                      </TableCell>
                       <TableCell>
                         <Badge 
                           variant="outline" 
@@ -281,7 +318,10 @@ const OrderHistory = () => {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Total Price</p>
-                    <p className="font-medium">${selectedOrder.totalPrice.toFixed(2)}</p>
+                    <p className="font-medium flex items-center">
+                      <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+                      {selectedOrder.totalPrice.toFixed(2)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Status</p>
@@ -292,6 +332,14 @@ const OrderHistory = () => {
                       {selectedOrder.status}
                     </Badge>
                   </div>
+                  {selectedOrder.paymentMethod && (
+                    <div>
+                      <p className="text-sm text-muted-foreground">Payment Method</p>
+                      <p className="font-medium">
+                        {paymentMethods.find(m => m.value === selectedOrder.paymentMethod)?.label || selectedOrder.paymentMethod}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 
                 <div>
@@ -344,13 +392,13 @@ const OrderHistory = () => {
                       Cancel Order
                     </Button>
                     <Button
-                      onClick={() => handlePayment(selectedOrder.id)}
+                      onClick={() => handleOpenPaymentDialog(selectedOrder)}
                       disabled={isPaymentProcessing}
                     >
                       {isPaymentProcessing ? (
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
                       ) : (
-                        <CreditCard className="h-4 w-4 mr-2" />
+                        <IndianRupee className="h-4 w-4 mr-2" />
                       )}
                       Pay Now
                     </Button>
@@ -387,6 +435,75 @@ const OrderHistory = () => {
             </DialogContent>
           </Dialog>
         )}
+
+        {/* Payment Method Dialog */}
+        <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Choose Payment Method</DialogTitle>
+              <DialogDescription>
+                Select how you would like to pay for your order
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="py-4">
+              <RadioGroup
+                value={selectedPaymentMethod}
+                onValueChange={setSelectedPaymentMethod}
+                className="grid gap-2"
+              >
+                {paymentMethods.map((method) => (
+                  <div key={method.value} className="flex items-center space-x-2 rounded-md border p-3">
+                    <RadioGroupItem value={method.value} id={`payment-${method.value}`} />
+                    <Label htmlFor={`payment-${method.value}`} className="flex items-center cursor-pointer">
+                      {method.icon}
+                      {method.label}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+            
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsPaymentDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handlePayment} disabled={isPaymentProcessing}>
+                {isPaymentProcessing ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : (
+                  <IndianRupee className="h-4 w-4 mr-2" />
+                )}
+                Proceed to Pay
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Contact Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Contact Us</CardTitle>
+            <CardDescription>
+              Get in touch with our support team
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <div className="grid gap-1">
+                  <p className="text-sm text-muted-foreground">Email us:</p>
+                  <p className="text-sm">5231412019@gvpcdpgc.edu.in</p>
+                  <p className="text-sm">5231412017@gvpcdpgc.edu.in</p>
+                  <p className="text-sm">5231412011@gvpcdpgc.edu.in</p>
+                  <p className="text-sm">5231412060@gvpcdpgc.edu.in</p>
+                  <p className="text-sm">5231412038@gvpcdpgc.edu.in</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </MainLayout>
   );
