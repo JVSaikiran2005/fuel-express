@@ -34,13 +34,33 @@ const saveOrders = (orders: FuelOrder[]) => {
   localStorage.setItem('fuelOrders', JSON.stringify(orders));
 };
 
-// Get current fuel prices
+// Get current fuel prices from localStorage or use defaults
 export const getFuelPrices = () => {
-  // In a real app, these would come from an API or database
-  return {
+  const savedPrices = localStorage.getItem('fuelPrices');
+  if (savedPrices) {
+    return JSON.parse(savedPrices);
+  }
+  
+  // Default prices if not stored
+  const defaultPrices = {
     'petrol': 102.50, // Price in ₹
     'diesel': 96.25,  // Price in ₹
   };
+  
+  // Save default prices
+  localStorage.setItem('fuelPrices', JSON.stringify(defaultPrices));
+  
+  return defaultPrices;
+};
+
+// Update fuel prices
+export const updateFuelPrices = (prices: {petrol: number, diesel: number}) => {
+  localStorage.setItem('fuelPrices', JSON.stringify({
+    'petrol': prices.petrol,
+    'diesel': prices.diesel
+  }));
+  
+  return getFuelPrices();
 };
 
 // Calculate price based on fuel type and quantity
