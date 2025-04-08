@@ -84,9 +84,10 @@ export const getUserOrders = async (userId: string): Promise<FuelOrder[]> => {
     await new Promise(resolve => setTimeout(resolve, 500));
     
     const orders = getOrders();
-    return orders.filter(order => order.userId === userId).sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    // Ensure we only return orders that belong to this specific user
+    return orders
+      .filter(order => order.userId === userId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   } catch (error: any) {
     toast.error(error.message || 'Failed to fetch orders');
     throw error;

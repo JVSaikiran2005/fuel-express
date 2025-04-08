@@ -96,16 +96,12 @@ const OrderHistory = () => {
     
     try {
       setIsPaymentProcessing(true);
-      await payForOrder(orderId, currentUser.id);
+      const updatedOrder = await payForOrder(orderId, currentUser.id);
       
       // Update the order in the local state
       const updatedOrders = orders.map(order => {
         if (order.id === orderId) {
-          return {
-            ...order,
-            paymentStatus: 'paid',
-            status: 'processing'
-          };
+          return updatedOrder;
         }
         return order;
       });
@@ -114,11 +110,7 @@ const OrderHistory = () => {
       setFilteredOrders(updatedOrders);
       
       if (selectedOrder && selectedOrder.id === orderId) {
-        setSelectedOrder({
-          ...selectedOrder,
-          paymentStatus: 'paid',
-          status: 'processing'
-        });
+        setSelectedOrder(updatedOrder);
       }
       
       setIsDetailsOpen(false);
@@ -134,15 +126,12 @@ const OrderHistory = () => {
     
     try {
       setIsCancelling(true);
-      await updateOrderStatus(orderId, 'cancelled', currentUser.id);
+      const updatedOrder = await updateOrderStatus(orderId, 'cancelled', currentUser.id);
       
       // Update the order in the local state
       const updatedOrders = orders.map(order => {
         if (order.id === orderId) {
-          return {
-            ...order,
-            status: 'cancelled'
-          };
+          return updatedOrder;
         }
         return order;
       });
@@ -151,10 +140,7 @@ const OrderHistory = () => {
       setFilteredOrders(updatedOrders);
       
       if (selectedOrder && selectedOrder.id === orderId) {
-        setSelectedOrder({
-          ...selectedOrder,
-          status: 'cancelled'
-        });
+        setSelectedOrder(updatedOrder);
       }
       
       setIsDetailsOpen(false);
