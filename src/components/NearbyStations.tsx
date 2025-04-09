@@ -34,7 +34,7 @@ const initialStations: FuelStation[] = [
   {
     id: 'station1',
     name: 'Bharat Petroleum',
-    location: 'Gachibowli, Hyderabad',
+    location: 'MVP colony, Visakhapatnam',
     distance: '1.2 km',
     petrolPrice: 102.50,
     dieselPrice: 96.25,
@@ -42,7 +42,7 @@ const initialStations: FuelStation[] = [
   {
     id: 'station2',
     name: 'Indian Oil',
-    location: 'Kukatpally, Hyderabad',
+    location: 'Endada,Visakhapatnam',
     distance: '2.5 km',
     petrolPrice: 102.65,
     dieselPrice: 96.40,
@@ -50,7 +50,7 @@ const initialStations: FuelStation[] = [
   {
     id: 'station3',
     name: 'Hindustan Petroleum',
-    location: 'Ameerpet, Hyderabad',
+    location: 'Madhurawada,Visakhapatnam',
     distance: '3.8 km',
     petrolPrice: 102.45,
     dieselPrice: 96.15,
@@ -58,15 +58,15 @@ const initialStations: FuelStation[] = [
   {
     id: 'station4',
     name: 'Reliance Petroleum',
-    location: 'Banjara Hills, Hyderabad',
+    location: 'Maddillapalem,Visakhapatnam',
     distance: '4.3 km',
     petrolPrice: 102.70,
     dieselPrice: 96.35,
   },
   {
     id: 'station5',
-    name: 'Essar Petroleum',
-    location: 'Madhapur, Hyderabad',
+    name: 'Bharat Petroleum',
+    location: 'RTC Complex,Visakhapatnam',
     distance: '5.1 km',
     petrolPrice: 102.55,
     dieselPrice: 96.20,
