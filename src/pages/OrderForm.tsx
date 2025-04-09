@@ -31,6 +31,8 @@ import {
 import { toast } from 'sonner';
 import { createOrder, getFuelPrices } from '@/services/orderService';
 import { Loader2, CreditCard, Truck, Droplets, IndianRupee, Phone, Mail } from 'lucide-react';
+import QRCodePayment from '@/components/payment/QRCodePayment';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 const fuelTypes = [
   { value: 'petrol', label: 'Petrol' },
@@ -55,6 +57,10 @@ const OrderForm = () => {
   const [address, setAddress] = useState('');
   const [extraNotes, setExtraNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
+  
+  // Payment state
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [currentOrderId, setCurrentOrderId] = useState<string>('');
 
   // Get current fuel prices
   const fuelPrices = getFuelPrices();
@@ -80,8 +86,8 @@ const OrderForm = () => {
     try {
       setLoading(true);
       
-      // Make sure to pass the current user's ID when creating an order
-      await createOrder({
+      // Create the order
+      const order = await createOrder({
         userId: currentUser.id,
         fuelType,
         quantity,
@@ -89,13 +95,32 @@ const OrderForm = () => {
         paymentMethod: paymentMethod as any,
       });
       
-      navigate('/history');
+      // For online payment methods, show the payment dialog
+      if (paymentMethod === 'phonepe') {
+        setCurrentOrderId(order.id);
+        setShowPaymentDialog(true);
+      } else if (paymentMethod === 'credit_card' || paymentMethod === 'debit_card') {
+        // Simulate a successful card payment after a short delay
+        setTimeout(() => {
+          toast.success('Card payment processed successfully');
+          navigate('/history');
+        }, 1500);
+      } else {
+        // Cash on delivery
+        navigate('/history');
+      }
+      
     } catch (error) {
       console.error('Error creating order:', error);
       // Toast error is shown in the service
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePaymentComplete = () => {
+    setShowPaymentDialog(false);
+    navigate('/history');
   };
 
   return (
@@ -188,7 +213,7 @@ const OrderForm = () => {
                     className="grid grid-cols-1 gap-2 sm:grid-cols-2"
                   >
                     {paymentMethods.map((method) => (
-                      <div key={method.value} className="flex items-center space-x-2 rounded-md border p-3">
+                      <div key={method.value} className="flex items-center space-x-2 rounded-md border p-3 hover:bg-muted/50 transition-colors">
                         <RadioGroupItem value={method.value} id={method.value} />
                         <Label htmlFor={method.value} className="flex items-center cursor-pointer">
                           {method.icon}
@@ -309,6 +334,21 @@ const OrderForm = () => {
             </Card>
           </div>
         </form>
+        
+        {/* Payment Dialog for PhonePe */}
+        <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogTitle>Complete Your Payment</DialogTitle>
+            <DialogDescription>
+              Scan the QR code with PhonePe to complete your payment
+            </DialogDescription>
+            <QRCodePayment 
+              amount={totalPrice}
+              orderId={currentOrderId}
+              onComplete={handlePaymentComplete}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     </MainLayout>
   );
