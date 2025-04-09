@@ -29,24 +29,23 @@ const Index = () => {
   return (
     <MainLayout title="Dashboard">
       <div className="grid gap-6">
-       <div className="relative overflow-hidden rounded-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-fuel-blue/80 to-transparent z-10"></div>
-          <img 
-            src="https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
-            alt="Man holding fuel pump at gas station" 
-            className="w-full h-64 object-cover"
-          />
-          <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-10 z-20">
-            <h2 className="text-3xl font-bold text-white mb-2">Fuel Delivered to Your Doorstep</h2>
-            <p className="text-white/90 max-w-md">Skip the lines at the gas station. Get fuel delivered directly to you - convenient, quick, and reliable.</p>
-            <Button 
-              onClick={() => navigate('/order')} 
-              className="mt-4 w-fit"
-            >
-              Order Now
-            </Button>
-          </div>
-        </div>
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="hover-scale transition-transform duration-200 hover:scale-[1.01]">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <div className="bg-blue-100 p-2 rounded-full">
+                  <Droplets className="h-5 w-5 text-blue-600" />
+                </div>
+                Current Fuel Prices
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                    <span>Petrol</span>
+                  </div>
 
                   <div className="flex items-center font-semibold">
                     <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
