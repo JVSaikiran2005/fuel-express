@@ -46,6 +46,10 @@ const paymentMethods = [
   { value: 'cash_on_delivery', label: 'Cash on Delivery', icon: <IndianRupee className="mr-2 h-4 w-4" /> },
 ];
 
+// Constants for charges
+const DELIVERY_CHARGE = 30; // ₹30
+const SERVICE_CHARGE = 20;  // ₹20
+
 const OrderForm = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -67,7 +71,8 @@ const OrderForm = () => {
 
   // Calculate price based on selected options
   const pricePerLiter = fuelPrices[fuelType as keyof typeof fuelPrices] || 102.50;
-  const totalPrice = pricePerLiter * quantity;
+  const fuelCost = pricePerLiter * quantity;
+  const totalPrice = fuelCost + DELIVERY_CHARGE + SERVICE_CHARGE;
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -250,8 +255,25 @@ const OrderForm = () => {
                     <span className="font-medium">{quantity} liters</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Delivery Fee:</span>
-                    <span className="font-medium">Free</span>
+                    <span className="text-muted-foreground">Fuel Cost:</span>
+                    <span className="font-medium flex items-center">
+                      <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+                      {fuelCost.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Delivery Charge:</span>
+                    <span className="font-medium flex items-center">
+                      <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+                      {DELIVERY_CHARGE.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Service Charge:</span>
+                    <span className="font-medium flex items-center">
+                      <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+                      {SERVICE_CHARGE.toFixed(2)}
+                    </span>
                   </div>
                   <div className="border-t my-3"></div>
                   <div className="flex justify-between">
