@@ -105,4 +105,12 @@
   .hover-scale {
     @apply transition-transform duration-200 hover:scale-105;
   }
+  
+  .feature-card {
+    @apply bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent;
+  }
 }
