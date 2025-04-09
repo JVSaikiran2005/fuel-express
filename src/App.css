@@ -7,9 +7,7 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-image: linear-gradient(to bottom, #f8fafc, #f1f5f9);
-  background-attachment: fixed;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .logo {
@@ -18,7 +16,6 @@ body {
   will-change: filter;
   transition: filter 300ms;
 }
-
 .logo:hover {
   filter: drop-shadow(0 0 2em #3b82f6aa);
 }
@@ -36,112 +33,4 @@ body {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
-}
-
-/* Professional card styling */
-.hover-card {
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(229, 231, 235, 0.5);
-  backdrop-filter: blur(8px);
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-.hover-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-/* QR Code Styling */
-.qr-code-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-/* PhonePe themed styling */
-.phonepe-bg {
-  background-color: #5f259f;
-  color: white;
-}
-
-.phonepe-text {
-  color: #5f259f;
-}
-
-/* Gradient backgrounds */
-.bg-gradient-blue {
-  background: linear-gradient(135deg, #4761e6 0%, #2945c2 100%);
-}
-
-.bg-gradient-green {
-  background: linear-gradient(135deg, #33cc9e 0%, #1a9f7a 100%);
-}
-
-/* Glass effect elements */
-.glass-effect {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-}
-
-/* Text gradient */
-.text-gradient {
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  background-image: linear-gradient(90deg, #3b82f6, #2563eb);
-}
-
-/* Professional section layouts */
-.section-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
-
-/* Animation utilities */
-.fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Button effects */
-.btn-hover-effect {
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-hover-effect:after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: -100%;
-  background: rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-}
-
-.btn-hover-effect:hover:after {
-  left: 100%;
 }

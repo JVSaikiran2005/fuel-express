@@ -31,8 +31,6 @@ import {
 import { toast } from 'sonner';
 import { createOrder, getFuelPrices } from '@/services/orderService';
 import { Loader2, CreditCard, Truck, Droplets, IndianRupee, Phone, Mail } from 'lucide-react';
-import QRCodePayment from '@/components/payment/QRCodePayment';
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 const fuelTypes = [
   { value: 'petrol', label: 'Petrol' },
@@ -46,10 +44,6 @@ const paymentMethods = [
   { value: 'cash_on_delivery', label: 'Cash on Delivery', icon: <IndianRupee className="mr-2 h-4 w-4" /> },
 ];
 
-// Constants for charges
-const DELIVERY_CHARGE = 30; // ₹30
-const SERVICE_CHARGE = 20;  // ₹20
-
 const OrderForm = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -61,18 +55,13 @@ const OrderForm = () => {
   const [address, setAddress] = useState('');
   const [extraNotes, setExtraNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
-  
-  // Payment state
-  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-  const [currentOrderId, setCurrentOrderId] = useState<string>('');
 
   // Get current fuel prices
   const fuelPrices = getFuelPrices();
 
   // Calculate price based on selected options
   const pricePerLiter = fuelPrices[fuelType as keyof typeof fuelPrices] || 102.50;
-  const fuelCost = pricePerLiter * quantity;
-  const totalPrice = fuelCost + DELIVERY_CHARGE + SERVICE_CHARGE;
+  const totalPrice = pricePerLiter * quantity;
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,8 +80,8 @@ const OrderForm = () => {
     try {
       setLoading(true);
       
-      // Create the order
-      const order = await createOrder({
+      // Make sure to pass the current user's ID when creating an order
+      await createOrder({
         userId: currentUser.id,
         fuelType,
         quantity,
@@ -100,32 +89,13 @@ const OrderForm = () => {
         paymentMethod: paymentMethod as any,
       });
       
-      // For online payment methods, show the payment dialog
-      if (paymentMethod === 'phonepe') {
-        setCurrentOrderId(order.id);
-        setShowPaymentDialog(true);
-      } else if (paymentMethod === 'credit_card' || paymentMethod === 'debit_card') {
-        // Simulate a successful card payment after a short delay
-        setTimeout(() => {
-          toast.success('Card payment processed successfully');
-          navigate('/history');
-        }, 1500);
-      } else {
-        // Cash on delivery
-        navigate('/history');
-      }
-      
+      navigate('/history');
     } catch (error) {
       console.error('Error creating order:', error);
       // Toast error is shown in the service
     } finally {
       setLoading(false);
     }
-  };
-
-  const handlePaymentComplete = () => {
-    setShowPaymentDialog(false);
-    navigate('/history');
   };
 
   return (
@@ -218,7 +188,7 @@ const OrderForm = () => {
                     className="grid grid-cols-1 gap-2 sm:grid-cols-2"
                   >
                     {paymentMethods.map((method) => (
-                      <div key={method.value} className="flex items-center space-x-2 rounded-md border p-3 hover:bg-muted/50 transition-colors">
+                      <div key={method.value} className="flex items-center space-x-2 rounded-md border p-3">
                         <RadioGroupItem value={method.value} id={method.value} />
                         <Label htmlFor={method.value} className="flex items-center cursor-pointer">
                           {method.icon}
@@ -255,25 +225,8 @@ const OrderForm = () => {
                     <span className="font-medium">{quantity} liters</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Fuel Cost:</span>
-                    <span className="font-medium flex items-center">
-                      <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
-                      {fuelCost.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Delivery Charge:</span>
-                    <span className="font-medium flex items-center">
-                      <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
-                      {DELIVERY_CHARGE.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Service Charge:</span>
-                    <span className="font-medium flex items-center">
-                      <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
-                      {SERVICE_CHARGE.toFixed(2)}
-                    </span>
+                    <span className="text-muted-foreground">Delivery Fee:</span>
+                    <span className="font-medium">Free</span>
                   </div>
                   <div className="border-t my-3"></div>
                   <div className="flex justify-between">
@@ -356,21 +309,6 @@ const OrderForm = () => {
             </Card>
           </div>
         </form>
-        
-        {/* Payment Dialog for PhonePe */}
-        <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-          <DialogContent className="sm:max-w-md">
-            <DialogTitle>Complete Your Payment</DialogTitle>
-            <DialogDescription>
-              Scan the QR code with PhonePe to complete your payment
-            </DialogDescription>
-            <QRCodePayment 
-              amount={totalPrice}
-              orderId={currentOrderId}
-              onComplete={handlePaymentComplete}
-            />
-          </DialogContent>
-        </Dialog>
       </div>
     </MainLayout>
   );

@@ -74,11 +74,11 @@ const Login = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-700 via-blue-500 to-blue-400 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-800 to-blue-500 flex flex-col items-center justify-center p-4">
       <div className="container mx-auto grid md:grid-cols-2 gap-8 max-w-6xl">
-        <div className="text-white space-y-8 glass-effect p-8 rounded-xl">
+        <div className="text-white space-y-8">
           <div className="text-center md:text-left mb-8">
-            <h1 className="text-4xl font-bold mb-2 text-gradient">Fuel Express</h1>
+            <h1 className="text-4xl font-bold mb-2">Fuel Express</h1>
             <p className="text-blue-100">Your premium fuel delivery service</p>
           </div>
           
@@ -88,8 +88,8 @@ const Login = () => {
               <p className="text-blue-100 mb-6">Our service offers unique benefits designed for your convenience and peace of mind</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-start space-x-3 feature-card hover-scale">
-                  <div className="bg-white/20 p-2 rounded-full">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 p-2 rounded-full">
                     <Clock className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -98,8 +98,8 @@ const Login = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-start space-x-3 feature-card hover-scale">
-                  <div className="bg-white/20 p-2 rounded-full">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 p-2 rounded-full">
                     <Shield className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -108,8 +108,8 @@ const Login = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-start space-x-3 feature-card hover-scale">
-                  <div className="bg-white/20 p-2 rounded-full">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 p-2 rounded-full">
                     <MapPin className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -118,8 +118,8 @@ const Login = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-start space-x-3 feature-card hover-scale">
-                  <div className="bg-white/20 p-2 rounded-full">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 p-2 rounded-full">
                     <Droplets className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -128,8 +128,8 @@ const Login = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-start space-x-3 feature-card hover-scale">
-                  <div className="bg-white/20 p-2 rounded-full">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 p-2 rounded-full">
                     <CalendarClock className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -138,8 +138,8 @@ const Login = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-start space-x-3 feature-card hover-scale">
-                  <div className="bg-white/20 p-2 rounded-full">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 p-2 rounded-full">
                     <IndianRupee className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -153,7 +153,7 @@ const Login = () => {
             <div className="text-center md:text-left">
               <h2 className="text-2xl font-semibold mb-3">Ready to Order Fuel?</h2>
               <p className="text-blue-100 mb-6">Experience the convenience of fuel delivery right to your location</p>
-              <Button size="lg" className="bg-white text-blue-800 hover:bg-blue-50 btn-hover-effect" onClick={() => navigate('/order')}>
+              <Button size="lg" className="bg-white text-blue-800 hover:bg-blue-50" onClick={() => navigate('/order')}>
                 Order Now
               </Button>
             </div>
@@ -161,7 +161,7 @@ const Login = () => {
         </div>
         
         <div className="w-full max-w-md mx-auto">          
-          <Card className="w-full shadow-xl glass-effect border-0">
+          <Card className="w-full shadow-xl">
             <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
@@ -187,7 +187,6 @@ const Login = () => {
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                         required
-                        className="bg-white/50"
                       />
                     </div>
                     
@@ -201,7 +200,6 @@ const Login = () => {
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                         required
-                        className="bg-white/50"
                       />
                     </div>
                   </CardContent>
@@ -210,7 +208,7 @@ const Login = () => {
                     <Button 
                       type="submit" 
                       className={cn(
-                        "w-full bg-blue-700 hover:bg-blue-800 button-primary", 
+                        "w-full bg-blue-700 hover:bg-blue-800", 
                         isLoading && "opacity-80"
                       )}
                       disabled={isLoading}
@@ -247,7 +245,6 @@ const Login = () => {
                         value={signupName}
                         onChange={(e) => setSignupName(e.target.value)} 
                         required
-                        className="bg-white/50"
                       />
                     </div>
                     
@@ -260,7 +257,6 @@ const Login = () => {
                         value={signupEmail}
                         onChange={(e) => setSignupEmail(e.target.value)}
                         required
-                        className="bg-white/50"
                       />
                     </div>
                     
@@ -272,7 +268,6 @@ const Login = () => {
                         value={signupPassword}
                         onChange={(e) => setSignupPassword(e.target.value)}
                         required
-                        className="bg-white/50"
                       />
                     </div>
                     
@@ -284,7 +279,6 @@ const Login = () => {
                         value={signupConfirmPassword}
                         onChange={(e) => setSignupConfirmPassword(e.target.value)}
                         required
-                        className="bg-white/50"
                       />
                     </div>
                   </CardContent>
@@ -293,7 +287,7 @@ const Login = () => {
                     <Button 
                       type="submit" 
                       className={cn(
-                        "w-full bg-blue-700 hover:bg-blue-800 button-primary", 
+                        "w-full bg-blue-700 hover:bg-blue-800", 
                         isLoading && "opacity-80"
                       )}
                       disabled={isLoading}
@@ -313,7 +307,7 @@ const Login = () => {
             </Tabs>
           </Card>
           
-          <p className="text-center mt-4 text-white text-sm backdrop-blur-sm py-2 rounded">
+          <p className="text-center mt-4 text-white text-sm">
             © 2025 Fuel Express. All rights reserved.
           </p>
         </div>
