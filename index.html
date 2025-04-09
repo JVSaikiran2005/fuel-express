@@ -28,7 +28,22 @@
     
   </div>
 
-  <!-- Your existing content goes here -->
+  <div class="p-4 bg-white rounded-xl shadow-md w-fit text-center mt-8 mx-auto">
+  <h2 class="text-xl font-bold text-gray-700 mb-2">Pay with PhonePe</h2>
+  <canvas id="qr-code"></canvas>
+  <p class="text-sm mt-2 text-gray-600">Scan with any UPI app</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script>
+  const upiLink = "upi://pay?pa=your-phonepe@upi&pn=FuelExpress&am=199.00&cu=INR";
+  const qr = new QRious({
+    element: document.getElementById('qr-code'),
+    value: upiLink,
+    size: 200
+  });
+</script>
+
 </body>
 
 </html>
