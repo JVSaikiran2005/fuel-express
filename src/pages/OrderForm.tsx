@@ -225,15 +225,20 @@ const OrderForm = () => {
                     <span className="font-medium">{quantity} liters</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Delivery Fee:</span>
-                    <span className="font-medium">50</span>
-                     <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Service Fee:</span>
-                    <span className="font-medium">50</span>
-                     <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
-                    </div>
+  <span className="text-muted-foreground">Delivery Fee:</span>
+  <span className="font-medium flex items-center">
+    <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+    50
+  </span>
+</div>
+<div className="flex justify-between">
+  <span className="text-muted-foreground">Service Fee:</span>
+  <span className="font-medium flex items-center">
+    <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+    50
+  </span>
+</div>
+
                   <div className="border-t my-3"></div>
                   <div className="flex justify-between">
                     <span className="font-medium">Total:</span>
