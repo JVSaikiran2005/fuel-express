@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Loader2, Clock, Shield, MapPin, Droplets, CalendarClock, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Logo from '@/components/Logo';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -74,11 +75,21 @@ const Login = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-800 to-blue-500 flex flex-col items-center justify-center p-4">
-      <div className="container mx-auto grid md:grid-cols-2 gap-8 max-w-6xl">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-800 to-blue-500 flex flex-col items-center justify-center p-4">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1545249390-6bdfa286032f?q=80&w=2574&auto=format&fit=crop" 
+          alt="Petrol Station" 
+          className="w-full h-full object-cover opacity-15"
+        />
+        <div className="absolute inset-0 bg-blue-900/70 mix-blend-multiply"></div>
+      </div>
+
+      <div className="container mx-auto grid md:grid-cols-2 gap-8 max-w-6xl z-10">
         <div className="text-white space-y-8">
           <div className="text-center md:text-left mb-8">
-            <h1 className="text-4xl font-bold mb-2">Fuel Express</h1>
+            <Logo size="lg" className="mx-auto md:mx-0 mb-4" />
             <p className="text-blue-100">Your premium fuel delivery service</p>
           </div>
           
@@ -161,7 +172,7 @@ const Login = () => {
         </div>
         
         <div className="w-full max-w-md mx-auto">          
-          <Card className="w-full shadow-xl">
+          <Card className="w-full shadow-xl backdrop-blur-sm bg-white/95">
             <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>

@@ -7,6 +7,7 @@ import {
   Home, Truck, History, LogOut, Menu, X, Mail
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Logo from '@/components/Logo';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -62,7 +63,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       {/* Sidebar - Desktop */}
       <div className="hidden lg:flex flex-col w-64 bg-white border-r border-gray-200">
         <div className="h-16 flex items-center justify-center border-b border-gray-200">
-          <h1 className="font-bold text-xl text-fuel-blue">Fuel Express</h1>
+          <Logo size="md" />
         </div>
         
         <div className="flex flex-col justify-between flex-1 px-4 py-6">
@@ -112,7 +113,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       )}>
         <div className="flex flex-col w-64 h-full bg-white border-r border-gray-200">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
-            <h1 className="font-bold text-xl text-fuel-blue">Fuel Express</h1>
+            <Logo size="md" />
           </div>
           
           <div className="flex flex-col justify-between flex-1 p-4">
