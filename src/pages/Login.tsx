@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -76,15 +75,7 @@ const Login = () => {
   
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-800 to-blue-500 flex flex-col items-center justify-center p-4">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1551223496-62c6294d4e38?q=80&w=3270&auto=format&fit=crop" 
-          alt="Fuel Station" 
-          className="w-full h-full object-cover opacity-15"
-        />
-        <div className="absolute inset-0 bg-blue-900/70 mix-blend-multiply"></div>
-      </div>
+      <div className="absolute inset-0 z-0 bg-blue-900/70"></div>
 
       <div className="container mx-auto grid md:grid-cols-2 gap-8 max-w-6xl z-10">
         <div className="text-white space-y-8">
