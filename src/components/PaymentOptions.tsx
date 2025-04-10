@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { CreditCard, QrCode, IndianRupee, CheckCircle } from 'lucide-react';
+import { CreditCard, QrCode, IndianRupee, CheckCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface PaymentOptionsProps {
