@@ -79,8 +79,8 @@ const Login = () => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1545249390-6bdfa286032f?q=80&w=2574&auto=format&fit=crop" 
-          alt="Petrol Station" 
+          src="https://images.unsplash.com/photo-1551223496-62c6294d4e38?q=80&w=3270&auto=format&fit=crop" 
+          alt="Fuel Station" 
           className="w-full h-full object-cover opacity-15"
         />
         <div className="absolute inset-0 bg-blue-900/70 mix-blend-multiply"></div>

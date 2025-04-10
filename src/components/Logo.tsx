@@ -35,7 +35,7 @@ const Logo: React.FC<LogoProps> = ({
       </div>
       
       {showText && (
-        <span className={`font-bold ${textSizeClasses[size]} bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500`}>
+        <span className={`font-bold ${textSizeClasses[size]} bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-blue-700`}>
           Fuel Express
         </span>
       )}
